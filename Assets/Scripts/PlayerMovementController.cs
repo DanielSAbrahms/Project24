@@ -3,7 +3,7 @@
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
 
-public class SC_TopDownController : MonoBehaviour
+public class PlayerMovementController : MonoBehaviour
 {
     //Player Camera variables
     // public enum CameraDirection { x, z }
@@ -49,6 +49,11 @@ public class SC_TopDownController : MonoBehaviour
         Cursor.visible = false;
     }
 
+    void Update()
+    {
+        DebugAll();
+    }
+
     void FixedUpdate()
     {
         Vector3 cameraOffset = new Vector3(cameraDistance, cameraHeight, 0);
@@ -62,7 +67,6 @@ public class SC_TopDownController : MonoBehaviour
         velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
         velocityChange.y = 0;
 
-        DumpToConsole(velocityChange);
         r.AddForce(velocityChange, ForceMode.VelocityChange);
 
         // We apply gravity manually for more tuning control
@@ -88,6 +92,8 @@ public class SC_TopDownController : MonoBehaviour
         float rotationOffsetY = targetVelocity.y;
         float rotationOffsetZ = targetVelocity.z;
         transform.LookAt(new Vector3(transform.position.x + rotationOffsetX, transform.position.y + rotationOffsetY, transform.position.z + rotationOffsetZ));
+
+        DebugAll();
     }
 
     Vector3 GetAimTargetPos()
@@ -119,9 +125,25 @@ public class SC_TopDownController : MonoBehaviour
         grounded = true;
     }
 
+    public void setSpeed (int newSpeed)
+    {
+        float newSpeedFloat = newSpeed;
+        speed = Mathf.Abs(newSpeedFloat);
+    }
+
+
+
+    // --------------------- Debug ------------------------------------
+
     public static void DumpToConsole(object obj)
     {
         var output = JsonUtility.ToJson(obj, true);
         Debug.Log(output);
+    }
+    public void DebugAll()
+    {
+        
+        // Debug.Log(speed);
+        //DumpToConsole(velocityChange);
     }
 }
