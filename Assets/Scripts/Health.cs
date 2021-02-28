@@ -39,9 +39,7 @@ public class Health : MonoBehaviour
     private void updateHealth(int newHealth)
     {
         currentHealth = newHealth;
-
-        int surplusHealth = currentHealth - maxHealth;
-        if (surplusHealth > 0) currentHealth -= surplusHealth;
+        if (currentHealth > maxHealth) currentHealth = maxHealth;
 
         if (currentHealth <= 0)
         {

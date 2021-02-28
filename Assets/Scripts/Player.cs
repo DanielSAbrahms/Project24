@@ -2,26 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Character 
 {
-    public Health playerHealth;
     public PlayerMovementController movementController;
-
-    public int walkSpeed = 40;
-    public int sprintSpeed = 60;
-    public enum Speed { Walk, Sprint};
-    public Speed currentSpeed;
-
 
     // Start is called before the first frame update
     void Start()
     {
-        playerHealth.maxHealth = 100;
-        playerHealth.minHealth = 0;
-
-        Speed currentSpeed = Speed.Walk;
-        //movementController.setSpeed(currentSpeed == Speed.Walk ? walkSpeed : sprintSpeed);
-        DumpToConsole(currentSpeed == Speed.Walk ? walkSpeed : sprintSpeed);
+        characterHealth.maxHealth = 100;
+        characterHealth.minHealth = 0;
+        characterStamina.maxStamina = 100;
+        characterStamina.minStamina = 0;
+        movementController.setSpeed(walkSpeed);
+        movementController.setSprintSpeedMult(sprintSpeedMult);
     }
 
     // Update is called once per frame
@@ -29,35 +22,25 @@ public class Player : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.X))
         {
-            playerHealth.takeDamage(10);
+            characterHealth.takeDamage(25);
         } else if (Input.GetKeyDown(KeyCode.C))
         {
-            playerHealth.giveHealth(10);
+            characterHealth.giveHealth(10);
         }
 
-
-        if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            currentSpeed = Speed.Sprint;
-        } else
-        {
-            currentSpeed = Speed.Walk;
-        }
-
-        //movementController.setSpeed(currentSpeed == Speed.Walk ? walkSpeed : sprintSpeed);
-
-        DebugAll();
+        if (Input.GetKeyDown(KeyCode.LeftShift)) startSprinting();
+        if (Input.GetKeyUp(KeyCode.LeftShift) || !characterStamina.hasStamina) stopSprinting();
     }
 
-    // --------------------- Debug ------------------------------------
-
-    public static void DumpToConsole(object obj)
+    private void startSprinting()
     {
-        var output = JsonUtility.ToJson(obj, true);
-        Debug.Log(output);
+        characterStamina.startSprinting();
+        movementController.startSprinting();
     }
-    public void DebugAll()
+
+    private void stopSprinting()
     {
-        // DumpToConsole(movementController.speed);
+        characterStamina.stopSprinting();
+        movementController.stopSprinting();
     }
 }

@@ -6,15 +6,16 @@
 public class PlayerMovementController : MonoBehaviour
 {
     //Player Camera variables
-    // public enum CameraDirection { x, z }
-    // public CameraDirection cameraDirection = CameraDirection.x;
     public float cameraHeight = 13f;
     public float cameraDistance = 7f;
     public Camera playerCamera;
     public GameObject targetIndicatorPrefab;
 
     //Player Controller variables
-    public float speed = 5.0f;
+    public float speed;
+    public bool isSprinting;
+    public float sprintSpeedMult;
+
     public float gravity = 14.0f;
     public float maxVelocityChange = 10.0f;
 
@@ -49,16 +50,12 @@ public class PlayerMovementController : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void Update()
-    {
-        DebugAll();
-    }
-
     void FixedUpdate()
     {
         Vector3 cameraOffset = new Vector3(cameraDistance, cameraHeight, 0);
         Vector3 targetVelocity = new Vector3(Input.GetAxis("Vertical") * (cameraDistance >= 0 ? -1 : 1), 0, Input.GetAxis("Horizontal") * (cameraDistance >= 0 ? 1 : -1));
-        targetVelocity *= speed;
+        if (isSprinting) targetVelocity *= speed * sprintSpeedMult;
+        else targetVelocity *= speed;
 
         // Apply a force that attempts to reach our target velocity
         Vector3 velocity = r.velocity;
@@ -92,8 +89,6 @@ public class PlayerMovementController : MonoBehaviour
         float rotationOffsetY = targetVelocity.y;
         float rotationOffsetZ = targetVelocity.z;
         transform.LookAt(new Vector3(transform.position.x + rotationOffsetX, transform.position.y + rotationOffsetY, transform.position.z + rotationOffsetZ));
-
-        DebugAll();
     }
 
     Vector3 GetAimTargetPos()
@@ -120,18 +115,30 @@ public class PlayerMovementController : MonoBehaviour
         return new Vector3(-5000, -5000, -5000);
     }
 
+    public void setSprintSpeedMult(float newMult)
+    {
+        sprintSpeedMult = newMult;
+    }
+
+    public void setSpeed(float newSpeed)
+    {
+        speed = newSpeed;
+    }
+
     void OnCollisionStay()
     {
         grounded = true;
     }
 
-    public void setSpeed (int newSpeed)
+    public void startSprinting()
     {
-        float newSpeedFloat = newSpeed;
-        speed = Mathf.Abs(newSpeedFloat);
+        isSprinting = true;
     }
 
-
+    public void stopSprinting()
+    {
+        isSprinting = false;
+    }
 
     // --------------------- Debug ------------------------------------
 
