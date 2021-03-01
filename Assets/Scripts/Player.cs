@@ -1,28 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Player : Character 
 {
     public EXP characterEXP;
     public PlayerMovementController movementController;
     public StatMenuManager statMenuManager;
-    private const int requiredEXPPerLevel = 1000;
-    private const int levelUpPointsEachLevel = 5;
 
+    private const int REQUIRED_EXP_PER_LEVEL = 1000;
+    private const int STATS_POINTS_EACH_LEVEL_UP = 5;
 
     // Start is called before the first frame update
     void Start()
     {
         level = 1;
-        stats.setupStats(10, 10, 10);
-        characterEXP.InitMaxEXP(requiredEXPPerLevel);
+        stats.SetupStats(10, 10, 10);
+        characterEXP.InitMaxEXP(REQUIRED_EXP_PER_LEVEL);
         characterHealth.minHealth = 0;
         characterStamina.minStamina = 0;
-        movementController.setSpeed(walkSpeed);
-        movementController.setSprintSpeedMult(sprintSpeedMult);
+        movementController.SetSpeed(walkSpeed);
+        movementController.SetSprintSpeedMult(sprintSpeedMult);
 
-        updateStats();
+        UpdateStats();
     }
 
     // Update is called once per frame
@@ -30,10 +28,10 @@ public class Player : Character
     {
         if(Input.GetKeyDown(KeyCode.X))
         {
-            characterHealth.takeDamage(25);
+            characterHealth.TakeDamage(25);
         } else if (Input.GetKeyDown(KeyCode.C))
         {
-            characterHealth.giveHealth(10);
+            characterHealth.GiveHealth(10);
         }
 
         if (Input.GetKeyDown(KeyCode.P))
@@ -43,42 +41,43 @@ public class Player : Character
 
         }
 
-        if (Input.GetKeyDown(KeyCode.L)) giveEXP(100);
+        if (Input.GetKeyDown(KeyCode.L)) GiveEXP(100);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift)) startSprinting();
-        if (Input.GetKeyUp(KeyCode.LeftShift) || !characterStamina.hasStamina) stopSprinting();
+        if (Input.GetKeyDown(KeyCode.LeftShift)) StartSprinting();
+        if (Input.GetKeyUp(KeyCode.LeftShift) || !characterStamina.hasStamina) StopSprinting();
     }
     
-    void levelUp()
+    public void LevelUp()
     {
-        int newMaxEXP = level * requiredEXPPerLevel;
-        int excessEXP = characterEXP.levelUp(newMaxEXP);
-        StartCoroutine(statMenuManager.WaitForLevelUpSelect(levelUpPointsEachLevel, (MainStatType statType) => {
-            stats.addOneToMainStat(statType);
+        level++;
+        int newMaxEXP = level * REQUIRED_EXP_PER_LEVEL;
+        int excessEXP = characterEXP.LevelUp(newMaxEXP);
+        if (excessEXP > 0) GiveEXP(excessEXP);
+        UpdateStats();
+        StartCoroutine(statMenuManager.WaitForLevelUpSelect(STATS_POINTS_EACH_LEVEL_UP, (MainStatType statType) => {
+            stats.AddOneToMainStat(statType);
             statMenuManager.Refresh(level, stats);
         }));
-        if (excessEXP > 0) giveEXP(excessEXP);
-        updateStats();
     }
 
-    void giveEXP(int newEXP)
+    public void GiveEXP(int newEXP)
     {
-        characterEXP.giveEXP(newEXP);
+        characterEXP.GiveEXP(newEXP);
         if (characterEXP.isReadyToLevelUp)
         {
-            levelUp();
+            LevelUp();
         }
     }
 
-    private void startSprinting()
+    private void StartSprinting()
     {
-        characterStamina.startSprinting();
-        movementController.startSprinting();
+        characterStamina.StartSprinting();
+        movementController.StartSprinting();
     }
 
-    private void stopSprinting()
+    private void StopSprinting()
     {
-        characterStamina.stopSprinting();
-        movementController.stopSprinting();
+        characterStamina.StopSprinting();
+        movementController.StopSprinting();
     }
 }

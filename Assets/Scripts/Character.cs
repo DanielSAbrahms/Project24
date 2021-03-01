@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Character : MonoBehaviour
 {
@@ -9,16 +7,16 @@ public class Character : MonoBehaviour
     public Stamina characterStamina;
     public Stats stats;
 
-    public float sprintSpeedMult;
-    public float walkSpeed;
+    public float walkSpeed; // How fast is walking
+    public float sprintSpeedMult; // How much fast sprinting is than walking
 
-    private const int maxHealthPerVitalityLevel = 10;
-    private const int maxStaminaPerVitalityLevel = 10;
+    private const int MAX_HEALTH_PER_VITALITY_LEVEL = 10;
+    private const int MAX_STAMINA_PER_VITALITY_LEVEL = 10;
 
     // Start is called before the first frame update
     void Start()
     {
-        stats.setupStats(10, 10, 10);
+        stats.SetupStats(10, 10, 10);
         characterHealth.maxHealth = 100;
         characterHealth.minHealth = 0;
         characterStamina.maxStamina = 100;
@@ -27,25 +25,24 @@ public class Character : MonoBehaviour
 
     // Update is called once per frame
     void Update()
+    {}
+
+    // Updates characters health and stamina according to current stats
+    public void UpdateStats()
     {
-        
+        characterHealth.maxHealth = MAX_HEALTH_PER_VITALITY_LEVEL * stats.vitality;
+        characterStamina.maxStamina = MAX_STAMINA_PER_VITALITY_LEVEL * stats.vitality;
+        stats.UpdateStats();
     }
 
-    public void updateStats()
+    private void StartSprinting()
     {
-        characterHealth.maxHealth = maxHealthPerVitalityLevel * stats.vitality;
-        characterStamina.maxStamina = maxStaminaPerVitalityLevel * stats.vitality;
-        stats.updateStats();
+        characterStamina.StartSprinting();
     }
 
-    private void startSprinting()
+    private void StopSprinting()
     {
-        characterStamina.startSprinting();
-    }
-
-    private void stopSprinting()
-    {
-        characterStamina.stopSprinting();
+        characterStamina.StopSprinting();
     }
 
     // --------------------- Debug ------------------------------------

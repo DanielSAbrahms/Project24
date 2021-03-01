@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EXP : MonoBehaviour
 {
@@ -8,7 +6,6 @@ public class EXP : MonoBehaviour
     public int minEXP = 0;
     public int currentEXP;
     public bool isReadyToLevelUp;
-
     public EXPBar expBar;
 
     // Start is called before the first frame update
@@ -31,22 +28,23 @@ public class EXP : MonoBehaviour
         maxEXP = newMax;
     }
 
-    public void giveEXP(int newEXP)
+    public void GiveEXP(int newEXP)
     {
-        updateEXP(currentEXP + newEXP);
+        UpdateEXP(currentEXP + newEXP);
     }
 
-    public int levelUp(int newMax)
+    public int LevelUp(int newMax)
     {
         int excessEXP = currentEXP - maxEXP;
         maxEXP = newMax;
+        expBar.slider.maxValue = maxEXP;
         currentEXP = minEXP;
         isReadyToLevelUp = false;
         return excessEXP;
     }
 
-    // Handles updating stamina
-    private void updateEXP(int newEXP)
+    // Handles updating exp
+    private void UpdateEXP(int newEXP)
     {
         currentEXP = newEXP;
 

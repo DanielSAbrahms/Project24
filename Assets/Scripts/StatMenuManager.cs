@@ -1,12 +1,9 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StatMenuManager : MonoBehaviour
 {
-    private bool menuOpen;
-
     private GameObject statPanel;
     private Text strengthText;
     private Text levelText;
@@ -14,6 +11,7 @@ public class StatMenuManager : MonoBehaviour
 
     private int levelUpPoints;
     private MainStatType? chosenStatTemp;
+    private bool menuOpen;
 
     // Start is called before the first frame update
     void Start()
@@ -28,19 +26,13 @@ public class StatMenuManager : MonoBehaviour
         });
         chosenStatTemp = null;
         UpdateMenu();
-   
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (levelUpPoints > 0)
-        {
-            strengthLevelUpButton.gameObject.SetActive(true);
-        } else
-        {
-            strengthLevelUpButton.gameObject.SetActive(false);
-        }
+        if (levelUpPoints > 0) strengthLevelUpButton.gameObject.SetActive(true);
+        else strengthLevelUpButton.gameObject.SetActive(false);
     }
 
     void UpdateMenu()
@@ -48,21 +40,30 @@ public class StatMenuManager : MonoBehaviour
         if (!menuOpen) CloseMenu();
     }
 
+    public void Refresh(int level, Stats stats)
+    {
+        levelText.text = level.ToString();
+        strengthText.text = stats.strength.ToString();
+        if (!menuOpen) CloseMenu();
+    }
+
     public IEnumerator WaitForLevelUpSelect(int newLevelUpPoints, System.Action<MainStatType> callbackOnFinish)
     {
         levelUpPoints = newLevelUpPoints;
-        while (chosenStatTemp == null)
+        while (levelUpPoints > 0)
         {
-            yield return null;
+            while (chosenStatTemp == null)
+            {
+                yield return null;
+            }
+            if (levelUpPoints > 0)
+            {
+                levelUpPoints--;
+                callbackOnFinish((MainStatType)chosenStatTemp);
+                chosenStatTemp = null;
+            }
+
         }
-        if (levelUpPoints > 0)
-        {
-            levelUpPoints--;
-            callbackOnFinish((MainStatType)chosenStatTemp);
-            yield return chosenStatTemp;
-            chosenStatTemp = null;
-        }
-        
     }
 
     public void OpenMenu(int level, Stats stats)
@@ -70,13 +71,6 @@ public class StatMenuManager : MonoBehaviour
         menuOpen = true;
         statPanel.gameObject.SetActive(true);
         Refresh(level, stats);
-    }
-
-    public void Refresh(int level, Stats stats)
-    {
-        levelText.text = level.ToString();
-        strengthText.text = stats.strength.ToString();
-        if (!menuOpen) CloseMenu();
     }
 
     public void CloseMenu()

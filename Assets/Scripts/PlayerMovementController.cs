@@ -20,7 +20,6 @@ public class PlayerMovementController : MonoBehaviour
     public float maxVelocityChange = 10.0f;
 
     //Private variables
-    bool grounded = false;
     Rigidbody r;
     GameObject targetObject;
 
@@ -69,8 +68,6 @@ public class PlayerMovementController : MonoBehaviour
         // We apply gravity manually for more tuning control
         r.AddForce(new Vector3(0, -gravity * r.mass, 0));
 
-        grounded = false;
-
         //Mouse cursor offset effect
         playerPosOnScreen = playerCamera.WorldToViewportPoint(transform.position);
         cursorPosition = playerCamera.ScreenToViewportPoint(Input.mousePosition);
@@ -115,27 +112,22 @@ public class PlayerMovementController : MonoBehaviour
         return new Vector3(-5000, -5000, -5000);
     }
 
-    public void setSprintSpeedMult(float newMult)
+    public void SetSprintSpeedMult(float newMult)
     {
         sprintSpeedMult = newMult;
     }
 
-    public void setSpeed(float newSpeed)
+    public void SetSpeed(float newSpeed)
     {
         speed = newSpeed;
     }
 
-    void OnCollisionStay()
-    {
-        grounded = true;
-    }
-
-    public void startSprinting()
+    public void StartSprinting()
     {
         isSprinting = true;
     }
 
-    public void stopSprinting()
+    public void StopSprinting()
     {
         isSprinting = false;
     }
@@ -146,11 +138,5 @@ public class PlayerMovementController : MonoBehaviour
     {
         var output = JsonUtility.ToJson(obj, true);
         Debug.Log(output);
-    }
-    public void DebugAll()
-    {
-        
-        // Debug.Log(speed);
-        //DumpToConsole(velocityChange);
     }
 }

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Health : MonoBehaviour
 {
@@ -26,17 +24,17 @@ public class Health : MonoBehaviour
         healthBar.slider.value = currentHealth;
     }
 
-    public void giveHealth (int newHealth)
+    public void GiveHealth (int newHealth)
     {
-        updateHealth(currentHealth + newHealth);
+        UpdateHealth(currentHealth + newHealth);
     }
 
-    public void takeDamage(int incomingDamage)
+    public void TakeDamage(int incomingDamage)
     {
-        updateHealth(currentHealth - incomingDamage);
+        UpdateHealth(currentHealth - incomingDamage);
     }
 
-    private void updateHealth(int newHealth)
+    private void UpdateHealth(int newHealth)
     {
         currentHealth = newHealth;
         if (currentHealth > maxHealth) currentHealth = maxHealth;

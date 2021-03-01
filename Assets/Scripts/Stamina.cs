@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Stamina : MonoBehaviour
 {
@@ -9,17 +7,17 @@ public class Stamina : MonoBehaviour
     public int currentStamina;
     public bool hasStamina;
 
-    public StaminaBar staminaBar;
-
-    private const float staminaSprintRate = 0.03f;
+    private const float STAMINA_SPRINT_USAGE_RATE = 0.03f;
     private float staminaSprintCache = 0f;
-    private const int staminaSprintCacheLimit = 1;
+    private const int STAMINA_SPRINT_CACHE_LIMIT = 1;
 
-    private const float staminaRegenRate = 0.01f;
+    private const float STAMINA_REGEN_RATE = 0.01f;
     private float staminaRegenCache = 0f;
-    private const int staminaRegenCacheLimit = 1;
+    private const int STAMINA_REGEN_CACHE_LIMIT = 1;
 
     private bool isSprinting;
+
+    public StaminaBar staminaBar;
 
     // Start is called before the first frame update
     void Start()
@@ -35,45 +33,45 @@ public class Stamina : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isSprinting) useStaminaForFrame();
-        else regenStaminaForFrame();
+        if (isSprinting) UseStaminaForFrame();
+        else RegenStaminaForFrame();
         staminaBar.slider.value = currentStamina;
     }
 
-    public void giveStamina(int newStamina)
+    public void GiveStamina(int newStamina)
     {
         updateStamina(currentStamina + newStamina);
     }
 
-    public void startSprinting()
+    public void StartSprinting()
     {
         isSprinting = true;
     }
 
-    public void stopSprinting()
+    public void StopSprinting()
     {
         isSprinting = false;
     }
 
     // Handles usage every frame (sprinting)
-    private void useStaminaForFrame()
+    private void UseStaminaForFrame()
     {
-        staminaSprintCache += staminaSprintRate;
-        if (staminaSprintCache >= staminaSprintCacheLimit)
+        staminaSprintCache += STAMINA_SPRINT_USAGE_RATE;
+        if (staminaSprintCache >= STAMINA_SPRINT_CACHE_LIMIT)
         {
             staminaSprintCache = 0f;
-            updateStamina(currentStamina - staminaSprintCacheLimit);
+            updateStamina(currentStamina - STAMINA_SPRINT_CACHE_LIMIT);
         }
     }
 
     // Handles Regen every frame
-    private void regenStaminaForFrame()
+    private void RegenStaminaForFrame()
     {
-        staminaRegenCache += staminaRegenRate;
-        if (staminaRegenCache >= staminaRegenCacheLimit)
+        staminaRegenCache += STAMINA_REGEN_RATE;
+        if (staminaRegenCache >= STAMINA_REGEN_CACHE_LIMIT)
         {
             staminaRegenCache = 0f;
-            updateStamina(currentStamina + staminaRegenCacheLimit);
+            updateStamina(currentStamina + STAMINA_REGEN_CACHE_LIMIT);
         }
     }
 

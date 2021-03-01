@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public enum MainStatType { Strength, Agility, Vitality }
 
@@ -10,13 +8,13 @@ public class Stats : MonoBehaviour
     public int agility;
     public int vitality;
 
-    private const int maxStrength = 100;
-    private const int maxAgility = 100;
-    private const int maxVitality = 100;
+    private const int MAX_STRENGTH = 100;
+    private const int MAX_AGILITY = 100;
+    private const int MAX_VITALITY = 100;
 
-    private const int minStrength = 0;
-    private const int minAgility = 0;
-    private const int minVitality = 0;
+    private const int MIN_STRENGTH = 0;
+    private const int MIN_AGILITY = 0;
+    private const int MIN_VITALITY = 0;
 
     public int[] damageRange = new int[2];
     public int[] attackRange = new int[2];
@@ -28,17 +26,13 @@ public class Stats : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {
-        
-    }
+    { }
 
     // Update is called once per frame
     void Update()
-    {
-        
-    }
+    { }
 
-    public void addOneToMainStat(MainStatType statType)
+    public void AddOneToMainStat(MainStatType statType)
     {
         switch( statType)
         {
@@ -54,47 +48,47 @@ public class Stats : MonoBehaviour
         }
     }
 
-    public void setupStats(int initStrength, int initAgility, int initVitality)
+    public void SetupStats(int initStrength, int initAgility, int initVitality)
     {
-        setStrength(initStrength);
-        setAgility(initAgility);
-        setVitality(initVitality);
+        SetStrength(initStrength);
+        SetAgility(initAgility);
+        SetVitality(initVitality);
     }
 
-    public void updateStats()
+    public void UpdateStats()
     {
         damageRange = (new int[2] { strength * damageRangePerLevel[0], strength * damageRangePerLevel[1] });
         attackRange = (new int[2] { agility * attackRangePerLevel[0], agility * attackRangePerLevel[1] });
         defenseRange = (new int[2] { agility * defenseRangePerLevel[0], agility * defenseRangePerLevel[1] });
     }
 
-    public void setStrength(int newStrength)
+    public void SetStrength(int newStrength)
     {
         strength = newStrength;
-        if (strength > maxStrength) strength = maxStrength;
-        if (strength < minStrength) strength = minStrength;
+        if (strength > MAX_STRENGTH) strength = MAX_STRENGTH;
+        if (strength < MIN_STRENGTH) strength = MIN_STRENGTH;
     }
 
-    public void setAgility(int newAgility)
+    public void SetAgility(int newAgility)
     {
         agility = newAgility;
-        if (agility > maxAgility) agility = maxAgility;
-        if (agility < minAgility) agility = minAgility;
+        if (agility > MAX_AGILITY) agility = MAX_AGILITY;
+        if (agility < MIN_AGILITY) agility = MIN_AGILITY;
     }
 
-    public void setVitality(int newVitality)
+    public void SetVitality(int newVitality)
     {
         vitality = newVitality;
-        if (vitality > maxVitality) vitality = maxVitality;
-        if (vitality < minVitality) vitality = minVitality;
+        if (vitality > MAX_VITALITY) vitality = MAX_VITALITY;
+        if (vitality < MIN_VITALITY) vitality = MIN_VITALITY;
     }
 
-    public int getRandomDamage()
+    public int GetRandomDamage()
     {
-        return getRandomFromRange(damageRange);
+        return GetRandomFromRange(damageRange);
     }
 
-    private int getRandomFromRange(int[] range)
+    private int GetRandomFromRange(int[] range)
     {
         return Random.Range(range[0], range[1]);
     }
