@@ -11,7 +11,7 @@ public class Stamina : MonoBehaviour
 
     public StaminaBar staminaBar;
 
-    private const float staminaSprintRate = 0.02f;
+    private const float staminaSprintRate = 0.03f;
     private float staminaSprintCache = 0f;
     private const int staminaSprintCacheLimit = 1;
 
@@ -36,7 +36,7 @@ public class Stamina : MonoBehaviour
     void Update()
     {
         if (isSprinting) useStaminaForFrame();
-        else regenHealthForFrame();
+        else regenStaminaForFrame();
         staminaBar.slider.value = currentStamina;
     }
 
@@ -67,7 +67,7 @@ public class Stamina : MonoBehaviour
     }
 
     // Handles Regen every frame
-    private void regenHealthForFrame()
+    private void regenStaminaForFrame()
     {
         staminaRegenCache += staminaRegenRate;
         if (staminaRegenCache >= staminaRegenCacheLimit)
