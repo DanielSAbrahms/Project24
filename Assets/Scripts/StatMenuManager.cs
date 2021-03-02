@@ -6,6 +6,7 @@ public class StatMenuManager : MonoBehaviour
 {
     private GameObject statPanel;
     private Text levelText;
+    private Text pointsRemainingText;
     private Text strengthText;
     private Text agilityText;
     private Text vitalityText;
@@ -28,6 +29,7 @@ public class StatMenuManager : MonoBehaviour
         menuOpen = false;
         statPanel = GameObject.Find("StatPanel");
         levelText = GameObject.Find("LevelValueText").GetComponent<Text>();
+        pointsRemainingText = GameObject.Find("PointsRemainingText").GetComponent<Text>();
         strengthText = GameObject.Find("StrengthValueText").GetComponent<Text>();
         agilityText = GameObject.Find("AgilityValueText").GetComponent<Text>();
         vitalityText = GameObject.Find("VitalityValueText").GetComponent<Text>();
@@ -64,25 +66,34 @@ public class StatMenuManager : MonoBehaviour
         if (!menuOpen) CloseMenu();
     }
 
-    public void Refresh(int level, Stats stats, int maxHealth, int maxStamina)
+    public void Reset(int level, Stats stats, int maxHealth, int maxStamina, int? levelUpPointsValue = null)
     {
         levelText.text = level.ToString();
         strengthText.text = stats.strength.ToString();
         agilityText.text = stats.agility.ToString();
         vitalityText.text = stats.vitality.ToString();
         maxHealthText.text = maxHealth.ToString();
-        vitalityText.text = maxStamina.ToString();
+        maxStaminaText.text = maxStamina.ToString();
         damageText.text = stats.damageRange[0].ToString() + " - " + stats.damageRange[1].ToString();
         attackText.text = stats.attackRange[0].ToString() + " - " + stats.attackRange[1].ToString();
         defenseText.text = stats.defenseRange[0].ToString() + " - " + stats.defenseRange[1].ToString();
         if (!menuOpen) CloseMenu();
+
+        // Optional Additional Points (pre-levelup)
+        if (levelUpPointsValue != null)
+        {
+            pointsRemainingText.text = (levelUpPoints + (int)levelUpPointsValue).ToString();
+        } else
+        {
+            pointsRemainingText.text = levelUpPoints.ToString();
+        }
     }
 
     public IEnumerator WaitForLevelUpSelect(int newLevelUpPoints, System.Action<MainStatType> callbackOnFinish)
     {
         SetLevelUpButtonState(true);
 
-        levelUpPoints = newLevelUpPoints;
+        levelUpPoints += newLevelUpPoints;
         while (levelUpPoints > 0)
         {
             while (chosenStatTemp == null)
@@ -103,20 +114,10 @@ public class StatMenuManager : MonoBehaviour
     {
         menuOpen = true;
         statPanel.gameObject.SetActive(true);
-        Refresh(level, stats, maxHealth, maxStamina);
+        Reset(level, stats, maxHealth, maxStamina);
 
-        if (levelUpPoints > 0)
-        {
-            strengthLevelUpButton.gameObject.SetActive(true);
-            agilityLevelUpButton.gameObject.SetActive(true);
-            vitalityLevelUpButton.gameObject.SetActive(true);
-        }
-        else
-        {
-            strengthLevelUpButton.gameObject.SetActive(false);
-            agilityLevelUpButton.gameObject.SetActive(false);
-            vitalityLevelUpButton.gameObject.SetActive(false);
-        }
+        if (levelUpPoints > 0) { SetLevelUpButtonState(true); }
+        else {  SetLevelUpButtonState(false);  }
     }
 
     public void CloseMenu()

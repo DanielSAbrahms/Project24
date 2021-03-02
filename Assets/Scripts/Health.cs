@@ -14,14 +14,23 @@ public class Health : MonoBehaviour
     {
         currentHealth = maxHealth;
         hasHealth = true;
-        healthBar.slider.maxValue = maxHealth;
-        healthBar.slider.minValue = minHealth;
+        ResetHealthBar();
     }
 
     // Update is called once per frame
     void Update()
     {
-        healthBar.slider.value = currentHealth;
+        RefreshHealthBar();
+    }
+
+    public void ResetHealthBar()
+    {
+        healthBar.Reset(this);
+    }
+
+    public void RefreshHealthBar()
+    {
+        healthBar.Refresh(this);
     }
 
     public void GiveHealth (int newHealth)

@@ -9,10 +9,23 @@ public class HealthBar : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        slider.value = slider.maxValue;
     }
 
     // Update is called once per frame
     void Update()
     { }
+
+    // Resets all values to source
+    public void Reset(Health healthSource)
+    {
+        slider.minValue = healthSource.minHealth;
+        slider.maxValue = healthSource.maxHealth;
+        Refresh(healthSource);
+    }
+
+    // Resets only the current value to source
+    public void Refresh(Health healthSource)
+    {
+        slider.value = healthSource.currentHealth;
+    }
 }

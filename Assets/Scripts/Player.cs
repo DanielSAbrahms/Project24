@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-public class Player : Character 
+public class Player : Character
 {
-    public EXP characterEXP;
+    public EXP playerEXP;
     public PlayerMovementController movementController;
     public StatMenuManager statMenuManager;
 
@@ -10,21 +10,22 @@ public class Player : Character
     void Start()
     {
         level = 1;
-        stats.SetupStats(10, 10, 10);
-        characterEXP.InitMaxEXP(Parameters.REQUIRED_EXP_PER_LEVEL);
+        stats.SetupStats(Parameters.DEFAULT_STRENGTH, Parameters.DEFAULT_AGILITY, Parameters.DEFAULT_VITALITY);
+        playerEXP.InitMaxEXP(Parameters.REQUIRED_EXP_PER_LEVEL);
         characterHealth.minHealth = 0;
         characterStamina.minStamina = 0;
 
-        UpdateStats();
+        UpdatePlayerStats();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             characterHealth.TakeDamage(25);
-        } else if (Input.GetKeyDown(KeyCode.C))
+        }
+        else if (Input.GetKeyDown(KeyCode.C))
         {
             characterHealth.GiveHealth(10);
         }
@@ -33,35 +34,49 @@ public class Player : Character
         {
             if (!statMenuManager.IsMenuOpen()) { statMenuManager.OpenMenu(level, stats, characterHealth.maxHealth, characterStamina.maxStamina); }
             else { statMenuManager.CloseMenu(); }
-
         }
 
-        if (Input.GetKeyDown(KeyCode.L)) GiveEXP(100);
+        if (Input.GetKeyDown(KeyCode.L)) GiveEXP(100000);
 
         if (Input.GetKeyDown(KeyCode.LeftShift)) StartSprinting();
         if (Input.GetKeyUp(KeyCode.LeftShift) || !characterStamina.hasStamina) StopSprinting();
     }
-    
+
+    public void UpdatePlayerStats()
+    {
+        UpdateStats();
+        characterHealth.maxHealth = (Parameters.PLAYER_DEFAULT_HEALTH + (stats.vitality * Parameters.MAX_HEALTH_PER_LEVEL));
+        characterStamina.maxStamina = (Parameters.PLAYER_DEFAULT_STAMINA + (stats.vitality * Parameters.MAX_STAMINA_PER_LEVEL));
+        ResetHUD();
+    }
+
     public void LevelUp()
     {
         level++;
+        statMenuManager.Reset(level, stats, characterHealth.maxHealth, characterStamina.maxStamina, Parameters.STATS_POINTS_EACH_LEVEL_UP);
         int newMaxEXP = level * Parameters.REQUIRED_EXP_PER_LEVEL;
-        int excessEXP = characterEXP.LevelUp(newMaxEXP);
-        if (excessEXP > 0) GiveEXP(excessEXP);
-        UpdateStats();
-        StartCoroutine(statMenuManager.WaitForLevelUpSelect(Parameters.STATS_POINTS_EACH_LEVEL_UP, (MainStatType statType) => {
+        playerEXP.LevelUp(newMaxEXP);
+        UpdatePlayerStats();
+        StartCoroutine(statMenuManager.WaitForLevelUpSelect(Parameters.STATS_POINTS_EACH_LEVEL_UP, (MainStatType statType) =>
+        {
             stats.AddOneToMainStat(statType);
-            UpdateStats();
-            statMenuManager.Refresh(level, stats, characterHealth.maxHealth, characterStamina.maxStamina);
+            UpdatePlayerStats();
+            statMenuManager.Reset(level, stats, characterHealth.maxHealth, characterStamina.maxStamina);
         }));
     }
 
     public void GiveEXP(int newEXP)
     {
-        characterEXP.GiveEXP(newEXP);
-        if (characterEXP.isReadyToLevelUp)
+        // I don't want the exp class to care about excess excess -> It'll just clip everything
+        // I do want excess EXP to count towards the next level, so we handle that logic here
+        // We keep adding excess points back and leveling up recursively if necessary
+        // To the player, the excess level ups will appear stacked. But as the logic is identical, the resursive method's backwards order won't matter (I hope)
+        int excessEXP = (playerEXP.currentEXP + newEXP) - playerEXP.maxEXP;
+        playerEXP.GiveEXP(newEXP);
+        if (playerEXP.isReadyToLevelUp)
         {
             LevelUp();
+            if (excessEXP > 0) GiveEXP(excessEXP);
         }
     }
 
@@ -75,5 +90,12 @@ public class Player : Character
     {
         characterStamina.StopSprinting();
         movementController.StopSprinting();
+    }
+
+    private void ResetHUD()
+    {
+        characterHealth.ResetHealthBar();
+        characterStamina.ResetStaminaBar();
+        playerEXP.ResetEXPBar();
     }
 }

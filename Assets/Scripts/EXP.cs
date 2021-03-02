@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class EXP : MonoBehaviour
 {
@@ -13,14 +14,13 @@ public class EXP : MonoBehaviour
     {
         currentEXP = minEXP;
         isReadyToLevelUp = false;
-        expBar.slider.maxValue = maxEXP;
-        expBar.slider.minValue = minEXP;
+        ResetEXPBar();
     }
 
     // Update is called once per frame
     void Update()
     {
-        expBar.slider.value = currentEXP;
+        RefreshEXPBar();
     }
 
     public void InitMaxEXP (int newMax)
@@ -28,19 +28,27 @@ public class EXP : MonoBehaviour
         maxEXP = newMax;
     }
 
+    public void ResetEXPBar()
+    {
+        expBar.Reset(this);
+    }
+
+    public void RefreshEXPBar()
+    {
+        expBar.Refresh(this);
+    }
+
     public void GiveEXP(int newEXP)
     {
         UpdateEXP(currentEXP + newEXP);
     }
 
-    public int LevelUp(int newMax)
+    public void LevelUp(int newMax)
     {
-        int excessEXP = currentEXP - maxEXP;
         maxEXP = newMax;
-        expBar.slider.maxValue = maxEXP;
         currentEXP = minEXP;
+        ResetEXPBar();
         isReadyToLevelUp = false;
-        return excessEXP;
     }
 
     // Handles updating exp

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class Stamina : MonoBehaviour
 {
@@ -19,10 +20,8 @@ public class Stamina : MonoBehaviour
     {
         currentStamina = maxStamina;
         hasStamina = true;
-        staminaBar.slider.maxValue = maxStamina;
-        staminaBar.slider.minValue = minStamina;
-
         isSprinting = false;
+        ResetStaminaBar();
     }
 
     // Update is called once per frame
@@ -30,7 +29,17 @@ public class Stamina : MonoBehaviour
     {
         if (isSprinting) UseStaminaForFrame();
         else RegenStaminaForFrame();
-        staminaBar.slider.value = currentStamina;
+        RefreshStaminaBar();
+    }
+
+    public void ResetStaminaBar()
+    {
+        staminaBar.Reset(this);
+    }
+
+    public void RefreshStaminaBar()
+    {
+        staminaBar.Refresh(this);
     }
 
     public void GiveStamina(int newStamina)
