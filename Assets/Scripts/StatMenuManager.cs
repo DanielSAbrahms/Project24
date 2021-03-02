@@ -5,9 +5,13 @@ using UnityEngine.UI;
 public class StatMenuManager : MonoBehaviour
 {
     private GameObject statPanel;
-    private Text strengthText;
     private Text levelText;
+    private Text strengthText;
+    private Text agilityText;
+    private Text vitalityText;
     private Button strengthLevelUpButton;
+    private Button agilityLevelUpButton;
+    private Button vitalityLevelUpButton;
 
     private int levelUpPoints;
     private MainStatType? chosenStatTemp;
@@ -18,11 +22,22 @@ public class StatMenuManager : MonoBehaviour
     {
         menuOpen = false;
         statPanel = GameObject.Find("StatPanel");
-        strengthText = GameObject.Find("StrengthValueText").GetComponent<Text>();
         levelText = GameObject.Find("LevelValueText").GetComponent<Text>();
+        strengthText = GameObject.Find("StrengthValueText").GetComponent<Text>();
+        agilityText = GameObject.Find("AgilityValueText").GetComponent<Text>();
+        vitalityText = GameObject.Find("VitalityValueText").GetComponent<Text>();
+
         strengthLevelUpButton = GameObject.Find("LevelUpStrengthButton").GetComponent<Button>();
         strengthLevelUpButton.onClick.AddListener( delegate { 
             chosenStatTemp = MainStatType.Strength; 
+        });
+        agilityLevelUpButton = GameObject.Find("LevelUpAgilityButton").GetComponent<Button>();
+        agilityLevelUpButton.onClick.AddListener(delegate {
+            chosenStatTemp = MainStatType.Agility;
+        });
+        vitalityLevelUpButton = GameObject.Find("LevelUpVitalityButton").GetComponent<Button>();
+        vitalityLevelUpButton.onClick.AddListener(delegate {
+            chosenStatTemp = MainStatType.Vitality;
         });
         chosenStatTemp = null;
         UpdateMenu();
@@ -31,8 +46,18 @@ public class StatMenuManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (levelUpPoints > 0) strengthLevelUpButton.gameObject.SetActive(true);
-        else strengthLevelUpButton.gameObject.SetActive(false);
+        if (levelUpPoints > 0)
+        {
+            strengthLevelUpButton.gameObject.SetActive(true);
+            agilityLevelUpButton.gameObject.SetActive(true);
+            vitalityLevelUpButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            strengthLevelUpButton.gameObject.SetActive(false);
+            agilityLevelUpButton.gameObject.SetActive(false);
+            vitalityLevelUpButton.gameObject.SetActive(false);
+        }
     }
 
     void UpdateMenu()
@@ -44,6 +69,8 @@ public class StatMenuManager : MonoBehaviour
     {
         levelText.text = level.ToString();
         strengthText.text = stats.strength.ToString();
+        agilityText.text = stats.agility.ToString();
+        vitalityText.text = stats.vitality.ToString();
         if (!menuOpen) CloseMenu();
     }
 
