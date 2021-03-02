@@ -6,18 +6,13 @@ public class Stamina : MonoBehaviour
     public int minStamina = 0;
     public int currentStamina;
     public bool hasStamina;
+    public StaminaBar staminaBar;
 
-    private const float STAMINA_SPRINT_USAGE_RATE = 0.03f;
+    // Stamina Sprint Usage/ Regen
     private float staminaSprintCache = 0f;
-    private const int STAMINA_SPRINT_CACHE_LIMIT = 1;
-
-    private const float STAMINA_REGEN_RATE = 0.01f;
     private float staminaRegenCache = 0f;
-    private const int STAMINA_REGEN_CACHE_LIMIT = 1;
 
     private bool isSprinting;
-
-    public StaminaBar staminaBar;
 
     // Start is called before the first frame update
     void Start()
@@ -56,22 +51,22 @@ public class Stamina : MonoBehaviour
     // Handles usage every frame (sprinting)
     private void UseStaminaForFrame()
     {
-        staminaSprintCache += STAMINA_SPRINT_USAGE_RATE;
-        if (staminaSprintCache >= STAMINA_SPRINT_CACHE_LIMIT)
+        staminaSprintCache += Parameters.STAMINA_SPRINT_USAGE_RATE;
+        if (staminaSprintCache >= Parameters.STAMINA_SPRINT_CACHE_LIMIT)
         {
             staminaSprintCache = 0f;
-            updateStamina(currentStamina - STAMINA_SPRINT_CACHE_LIMIT);
+            updateStamina(currentStamina - Parameters.STAMINA_SPRINT_CACHE_LIMIT);
         }
     }
 
     // Handles Regen every frame
     private void RegenStaminaForFrame()
     {
-        staminaRegenCache += STAMINA_REGEN_RATE;
-        if (staminaRegenCache >= STAMINA_REGEN_CACHE_LIMIT)
+        staminaRegenCache += Parameters.STAMINA_REGEN_RATE;
+        if (staminaRegenCache >= Parameters.STAMINA_REGEN_CACHE_LIMIT)
         {
             staminaRegenCache = 0f;
-            updateStamina(currentStamina + STAMINA_REGEN_CACHE_LIMIT);
+            updateStamina(currentStamina + Parameters.STAMINA_REGEN_CACHE_LIMIT);
         }
     }
 

@@ -6,18 +6,11 @@
 public class PlayerMovementController : MonoBehaviour
 {
     //Player Camera variables
-    public float cameraHeight = 13f;
-    public float cameraDistance = 7f;
     public Camera playerCamera;
     public GameObject targetIndicatorPrefab;
 
     //Player Controller variables
-    public float speed;
     public bool isSprinting;
-    public float sprintSpeedMult;
-
-    public float gravity = 14.0f;
-    public float maxVelocityChange = 10.0f;
 
     //Private variables
     Rigidbody r;
@@ -51,22 +44,24 @@ public class PlayerMovementController : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector3 cameraOffset = new Vector3(cameraDistance, cameraHeight, 0);
-        Vector3 targetVelocity = new Vector3(Input.GetAxis("Vertical") * (cameraDistance >= 0 ? -1 : 1), 0, Input.GetAxis("Horizontal") * (cameraDistance >= 0 ? 1 : -1));
-        if (isSprinting) targetVelocity *= speed * sprintSpeedMult;
-        else targetVelocity *= speed;
+        // Directional Input
+        Vector3 cameraOffset = new Vector3(Parameters.CAMERA_DISTANCE, Parameters.CAMERA_HEIGHT, 0);
+        Vector3 targetVelocity = new Vector3(Input.GetAxis("Vertical") * (Parameters.CAMERA_DISTANCE >= 0 ? -1 : 1), 0, Input.GetAxis("Horizontal") * (Parameters.CAMERA_DISTANCE >= 0 ? 1 : -1));
+        targetVelocity *= Parameters.PLAYER_WALK_SPEED;
+
+        // Sprinting
+        if (isSprinting) targetVelocity *= Parameters.SPRINT_SPEED_MULTIPLIER;
 
         // Apply a force that attempts to reach our target velocity
         Vector3 velocity = r.velocity;
         Vector3 velocityChange = (targetVelocity - velocity);
-        velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-        velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
+        velocityChange.x = Mathf.Clamp(velocityChange.x, -Parameters.MAX_VELOCITY_CHANGE, Parameters.MAX_VELOCITY_CHANGE);
+        velocityChange.z = Mathf.Clamp(velocityChange.z, -Parameters.MAX_VELOCITY_CHANGE, Parameters.MAX_VELOCITY_CHANGE);
         velocityChange.y = 0;
-
         r.AddForce(velocityChange, ForceMode.VelocityChange);
 
         // We apply gravity manually for more tuning control
-        r.AddForce(new Vector3(0, -gravity * r.mass, 0));
+        r.AddForce(new Vector3(0, -Parameters.GRAVITY * r.mass, 0));
 
         //Mouse cursor offset effect
         playerPosOnScreen = playerCamera.WorldToViewportPoint(transform.position);
@@ -112,25 +107,9 @@ public class PlayerMovementController : MonoBehaviour
         return new Vector3(-5000, -5000, -5000);
     }
 
-    public void SetSprintSpeedMult(float newMult)
-    {
-        sprintSpeedMult = newMult;
-    }
+    public void StartSprinting() { isSprinting = true; }
 
-    public void SetSpeed(float newSpeed)
-    {
-        speed = newSpeed;
-    }
-
-    public void StartSprinting()
-    {
-        isSprinting = true;
-    }
-
-    public void StopSprinting()
-    {
-        isSprinting = false;
-    }
+    public void StopSprinting() { isSprinting = false; }
 
     // --------------------- Debug ------------------------------------
 

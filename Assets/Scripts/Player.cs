@@ -6,19 +6,14 @@ public class Player : Character
     public PlayerMovementController movementController;
     public StatMenuManager statMenuManager;
 
-    private const int REQUIRED_EXP_PER_LEVEL = 1000;
-    private const int STATS_POINTS_EACH_LEVEL_UP = 5;
-
     // Start is called before the first frame update
     void Start()
     {
         level = 1;
         stats.SetupStats(10, 10, 10);
-        characterEXP.InitMaxEXP(REQUIRED_EXP_PER_LEVEL);
+        characterEXP.InitMaxEXP(Parameters.REQUIRED_EXP_PER_LEVEL);
         characterHealth.minHealth = 0;
         characterStamina.minStamina = 0;
-        movementController.SetSpeed(walkSpeed);
-        movementController.SetSprintSpeedMult(sprintSpeedMult);
 
         UpdateStats();
     }
@@ -36,7 +31,7 @@ public class Player : Character
 
         if (Input.GetKeyDown(KeyCode.P))
         {
-            if (!statMenuManager.IsMenuOpen()) { statMenuManager.OpenMenu(level, stats); }
+            if (!statMenuManager.IsMenuOpen()) { statMenuManager.OpenMenu(level, stats, characterHealth.maxHealth, characterStamina.maxStamina); }
             else { statMenuManager.CloseMenu(); }
 
         }
@@ -50,13 +45,14 @@ public class Player : Character
     public void LevelUp()
     {
         level++;
-        int newMaxEXP = level * REQUIRED_EXP_PER_LEVEL;
+        int newMaxEXP = level * Parameters.REQUIRED_EXP_PER_LEVEL;
         int excessEXP = characterEXP.LevelUp(newMaxEXP);
         if (excessEXP > 0) GiveEXP(excessEXP);
         UpdateStats();
-        StartCoroutine(statMenuManager.WaitForLevelUpSelect(STATS_POINTS_EACH_LEVEL_UP, (MainStatType statType) => {
+        StartCoroutine(statMenuManager.WaitForLevelUpSelect(Parameters.STATS_POINTS_EACH_LEVEL_UP, (MainStatType statType) => {
             stats.AddOneToMainStat(statType);
-            statMenuManager.Refresh(level, stats);
+            UpdateStats();
+            statMenuManager.Refresh(level, stats, characterHealth.maxHealth, characterStamina.maxStamina);
         }));
     }
 
