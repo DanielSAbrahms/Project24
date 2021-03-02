@@ -49,6 +49,11 @@ public class Parameters : MonoBehaviour
     public const float STAMINA_SPRINT_USAGE_RATE = 0.03f;
     public const int STAMINA_SPRINT_CACHE_LIMIT = 1;
 
+    // Key Bindings
+    // TODO: Find correct type for binding
+    public const object OPEN_STAT_MENU_KEY_BINDING = KeyCode.P;
+    public const object SPRINT_KEY_BINDING = KeyCode.LeftShift;
+
     // Clip excess movement
     public const float MAX_VELOCITY_CHANGE = 10.0f;
 

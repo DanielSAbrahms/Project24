@@ -38,13 +38,4 @@ public class Character : MonoBehaviour
     {
         characterStamina.StopSprinting();
     }
-
-    // --------------------- Debug ------------------------------------
-    public static void DumpToConsole(object obj)
-    {
-        var output = JsonUtility.ToJson(obj, true);
-        Debug.Log(output);
-    }
-
-
 }

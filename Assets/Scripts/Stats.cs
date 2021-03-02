@@ -76,6 +76,16 @@ public class Stats : MonoBehaviour
         return GetRandomFromRange(damageRange);
     }
 
+    public int GetRandomAttack()
+    {
+        return GetRandomFromRange(attackRange);
+    }
+
+    public int GetRandomDefense()
+    {
+        return GetRandomFromRange(defenseRange);
+    }
+
     private int GetRandomFromRange(int[] range)
     {
         return Random.Range(range[0], range[1]);

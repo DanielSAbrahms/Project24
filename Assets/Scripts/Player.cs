@@ -30,7 +30,7 @@ public class Player : Character
             characterHealth.GiveHealth(10);
         }
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(Parameters.OPEN_STAT_MENU_KEY_BINDING))
         {
             if (!statMenuManager.IsMenuOpen()) { statMenuManager.OpenMenu(level, stats, characterHealth.maxHealth, characterStamina.maxStamina); }
             else { statMenuManager.CloseMenu(); }
@@ -38,8 +38,8 @@ public class Player : Character
 
         if (Input.GetKeyDown(KeyCode.L)) GiveEXP(100000);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift)) StartSprinting();
-        if (Input.GetKeyUp(KeyCode.LeftShift) || !characterStamina.hasStamina) StopSprinting();
+        if (Input.GetKeyDown(Parameters.SPRINT_KEY_BINDING)) StartSprinting();
+        if (Input.GetKeyUp(Parameters.SPRINT_KEY_BINDING) || !characterStamina.hasStamina) StopSprinting();
     }
 
     public void UpdatePlayerStats()

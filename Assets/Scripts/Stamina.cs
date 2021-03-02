@@ -58,6 +58,14 @@ public class Stamina : MonoBehaviour
     }
 
     // Handles usage every frame (sprinting)
+    // Because we using ints for stamina, the smallest amount we can use is 1
+    // If we use 1 stamina per frame, assuming were at 60fps, thats 60 stamina / second for sprinting (which is too much usage)
+    // To solve this, I'll start with defining the usage per frame as a float less than 1
+    // Also, I'm using a cache to keep the sum of the floats 
+    // The cache builds up each frame, and when it reaches its limit (an int) we can subtract it from stamina
+    // This means the stamina usage bar is slightly less than game fps 
+    // It also means the sprint functionality is dependent on having a constant fps (bad)
+    // I'm thinking I'll need to fix this using unity engine delays instead of the update method
     private void UseStaminaForFrame()
     {
         staminaSprintCache += Parameters.STAMINA_SPRINT_USAGE_RATE;

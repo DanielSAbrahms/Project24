@@ -29,7 +29,6 @@ public class PlayerMovementController : MonoBehaviour
     {
         r = GetComponent<Rigidbody>();
         r.freezeRotation = true;
-
         r.useGravity = true;
 
         //Instantiate aim target prefab
@@ -37,9 +36,6 @@ public class PlayerMovementController : MonoBehaviour
         {
             targetObject = Instantiate(targetIndicatorPrefab, Vector3.zero, Quaternion.identity) as GameObject;
         }
-
-        //Hide the cursor
-        Cursor.visible = false;
     }
 
     void FixedUpdate()
@@ -110,12 +106,4 @@ public class PlayerMovementController : MonoBehaviour
     public void StartSprinting() { isSprinting = true; }
 
     public void StopSprinting() { isSprinting = false; }
-
-    // --------------------- Debug ------------------------------------
-
-    public static void DumpToConsole(object obj)
-    {
-        var output = JsonUtility.ToJson(obj, true);
-        Debug.Log(output);
-    }
 }
