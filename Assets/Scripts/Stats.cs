@@ -45,9 +45,9 @@ public class Stats : MonoBehaviour
 
     public void UpdateStats()
     {
-        damageRange = (new int[2] { (int)(strength * Parameters.DAMAGE_RANGE_PER_LEVEL[0]), (int)(strength * Parameters.DAMAGE_RANGE_PER_LEVEL[1]) });
-        attackRange = (new int[2] { (int)(agility * Parameters.ATTACK_RANGE_PER_LEVEL[0]), (int)(agility * Parameters.ATTACK_RANGE_PER_LEVEL[1]) });
-        defenseRange = (new int[2] { (int)(agility * Parameters.DEFENSE_RANGE_PER_LEVEL[0]), (int)(agility * Parameters.DEFENSE_RANGE_PER_LEVEL[1]) });
+        damageRange = (new int[2] { (int)(strength * Parameters.DAMAGE_RANGE_SCALE[0]), (int)(strength * Parameters.DAMAGE_RANGE_SCALE[1]) });
+        attackRange = (new int[2] { (int)(agility * Parameters.ATTACK_RANGE_SCALE[0]), (int)(agility * Parameters.ATTACK_RANGE_SCALE[1]) });
+        defenseRange = (new int[2] { (int)(agility * Parameters.DEFENSE_RANGE_SCALE[0]), (int)(agility * Parameters.DEFENSE_RANGE_SCALE[1]) });
     }
 
     public void SetStrength(int newStrength)
@@ -73,21 +73,16 @@ public class Stats : MonoBehaviour
 
     public int GetRandomDamage()
     {
-        return GetRandomFromRange(damageRange);
+        return Utilities.GetRandomFromRange(damageRange);
     }
 
     public int GetRandomAttack()
     {
-        return GetRandomFromRange(attackRange);
+        return Utilities.GetRandomFromRange(attackRange);
     }
 
     public int GetRandomDefense()
     {
-        return GetRandomFromRange(defenseRange);
-    }
-
-    private int GetRandomFromRange(int[] range)
-    {
-        return Random.Range(range[0], range[1]);
+        return Utilities.GetRandomFromRange(defenseRange);
     }
 }

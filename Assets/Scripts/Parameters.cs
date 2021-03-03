@@ -37,11 +37,11 @@ public class Parameters : MonoBehaviour
     public const int MAX_VITALITY = 150;
 
     // Other Stat Scale Settings
-    public static readonly float[] DAMAGE_RANGE_PER_LEVEL = { 0.3f, 0.7f };
-    public static readonly float[] ATTACK_RANGE_PER_LEVEL = { 0.27f, 0.75f };
-    public static readonly float[] DEFENSE_RANGE_PER_LEVEL = { 0.36f, 0.63f };
-    public const int MAX_HEALTH_PER_LEVEL = 3;
-    public const int MAX_STAMINA_PER_LEVEL = 3;
+    public static readonly float[] DAMAGE_RANGE_SCALE = { 0.3f, 0.7f };
+    public static readonly float[] ATTACK_RANGE_SCALE = { 0.27f, 0.75f };
+    public static readonly float[] DEFENSE_RANGE_SCALE = { 0.36f, 0.63f };
+    public const int MAX_HEALTH_SCALE = 3;
+    public const int MAX_STAMINA_SCALE = 3;
 
     // Stamina Sprint Usage/ Regen
     public const int STAMINA_REGEN_CACHE_LIMIT = 1;
@@ -51,17 +51,12 @@ public class Parameters : MonoBehaviour
 
     // Key Bindings
     // TODO: Find correct type for binding
-    public const object OPEN_STAT_MENU_KEY_BINDING = KeyCode.P;
-    public const object SPRINT_KEY_BINDING = KeyCode.LeftShift;
+    public const UnityEngine.KeyCode OPEN_STAT_MENU_KEY_BINDING = KeyCode.P;
+    public const UnityEngine.KeyCode SPRINT_KEY_BINDING = KeyCode.LeftShift;
 
     // Clip excess movement
     public const float MAX_VELOCITY_CHANGE = 10.0f;
 
-    // Start is called before the first frame update
-    void Start()
-    { }
-
-    // Update is called once per frame
-    void Update()
-    { }
+    // Enemy Generation Settings
+    public static readonly float[] ENEMY_LEVEL_RANGE_SCALE = { 0.2f, 1.3f };
 }

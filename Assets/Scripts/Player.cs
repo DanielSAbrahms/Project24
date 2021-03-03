@@ -6,9 +6,13 @@ public class Player : Character
     public PlayerMovementController movementController;
     public StatMenuManager statMenuManager;
 
+    public HUD playerHUD;
+
     // Start is called before the first frame update
     void Start()
     {
+        playerHUD = GameObject.FindObjectOfType<HUD>();
+
         level = 1;
         stats.SetupStats(Parameters.DEFAULT_STRENGTH, Parameters.DEFAULT_AGILITY, Parameters.DEFAULT_VITALITY);
         playerEXP.InitMaxEXP(Parameters.REQUIRED_EXP_PER_LEVEL);
@@ -16,11 +20,14 @@ public class Player : Character
         characterStamina.minStamina = 0;
 
         UpdatePlayerStats();
+        playerHUD.ResetHealthBar(characterHealth);
     }
 
     // Update is called once per frame
     void Update()
     {
+        playerHUD.RefreshHealthBar(characterHealth);
+
         if (Input.GetKeyDown(KeyCode.X))
         {
             characterHealth.TakeDamage(25);
@@ -45,9 +52,9 @@ public class Player : Character
     public void UpdatePlayerStats()
     {
         UpdateStats();
-        characterHealth.maxHealth = (Parameters.PLAYER_DEFAULT_HEALTH + (stats.vitality * Parameters.MAX_HEALTH_PER_LEVEL));
-        characterStamina.maxStamina = (Parameters.PLAYER_DEFAULT_STAMINA + (stats.vitality * Parameters.MAX_STAMINA_PER_LEVEL));
-        ResetHUD();
+        characterHealth.maxHealth = (Parameters.PLAYER_DEFAULT_HEALTH + (stats.vitality * Parameters.MAX_HEALTH_SCALE));
+        characterStamina.maxStamina = (Parameters.PLAYER_DEFAULT_STAMINA + (stats.vitality * Parameters.MAX_STAMINA_SCALE));
+        playerHUD.UpdateAllStats(this);
     }
 
     public void LevelUp()
@@ -82,20 +89,13 @@ public class Player : Character
 
     private void StartSprinting()
     {
-        characterStamina.StartSprinting();
+        playerHUD.StartSprinting();
         movementController.StartSprinting();
     }
 
     private void StopSprinting()
     {
-        characterStamina.StopSprinting();
+        playerHUD.StopSprinting();
         movementController.StopSprinting();
-    }
-
-    private void ResetHUD()
-    {
-        characterHealth.ResetHealthBar();
-        characterStamina.ResetStaminaBar();
-        playerEXP.ResetEXPBar();
     }
 }

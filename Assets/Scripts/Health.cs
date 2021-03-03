@@ -7,30 +7,11 @@ public class Health : MonoBehaviour
     public int currentHealth;
     public bool hasHealth;
 
-    public HealthBar healthBar;
-
     // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
         hasHealth = true;
-        ResetHealthBar();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        RefreshHealthBar();
-    }
-
-    public void ResetHealthBar()
-    {
-        healthBar.Reset(this);
-    }
-
-    public void RefreshHealthBar()
-    {
-        healthBar.Refresh(this);
     }
 
     public void GiveHealth (int newHealth)

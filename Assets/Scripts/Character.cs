@@ -7,6 +7,13 @@ public class Character : MonoBehaviour
     public Stamina characterStamina;
     public Stats stats;
 
+    [Tooltip("Represents the affiliation (or team) of the actor. Actors of the same affiliation are friendly to eachother")]
+    public int affiliation;
+    [Tooltip("Represents point where other actors will aim when they attack this actor")]
+    public Transform aimPoint;
+
+    CharacterManager characterManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,27 +22,29 @@ public class Character : MonoBehaviour
         characterHealth.minHealth = 0;
         characterStamina.maxStamina = 100;
         characterStamina.minStamina = 0;
+
+        characterManager = GameObject.FindObjectOfType<CharacterManager>();
+
+        if (!characterManager.characters.Contains(this))
+        {
+            characterManager.characters.Add(this);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
-    {}
+    private void OnDestroy()
+    {
+        // Unregister as an actor
+        if (characterManager)
+        {
+            characterManager.characters.Remove(this);
+        }
+    }
 
     // Updates characters health and stamina according to current stats
     public void UpdateStats()
     {
-        characterHealth.maxHealth = Parameters.MAX_HEALTH_PER_LEVEL * stats.vitality;
-        characterStamina.maxStamina = Parameters.MAX_STAMINA_PER_LEVEL * stats.vitality;
+        characterHealth.maxHealth = Parameters.MAX_HEALTH_SCALE * stats.vitality;
+        characterStamina.maxStamina = Parameters.MAX_STAMINA_SCALE * stats.vitality;
         stats.UpdateStats();
-    }
-
-    private void StartSprinting()
-    {
-        characterStamina.StartSprinting();
-    }
-
-    private void StopSprinting()
-    {
-        characterStamina.StopSprinting();
     }
 }

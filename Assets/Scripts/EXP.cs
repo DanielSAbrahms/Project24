@@ -7,35 +7,17 @@ public class EXP : MonoBehaviour
     public int minEXP = 0;
     public int currentEXP;
     public bool isReadyToLevelUp;
-    public EXPBar expBar;
 
     // Start is called before the first frame update
     void Start()
     {
         currentEXP = minEXP;
         isReadyToLevelUp = false;
-        ResetEXPBar();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        RefreshEXPBar();
     }
 
     public void InitMaxEXP (int newMax)
     {
         maxEXP = newMax;
-    }
-
-    public void ResetEXPBar()
-    {
-        expBar.Reset(this);
-    }
-
-    public void RefreshEXPBar()
-    {
-        expBar.Refresh(this);
     }
 
     public void GiveEXP(int newEXP)
@@ -47,7 +29,6 @@ public class EXP : MonoBehaviour
     {
         maxEXP = newMax;
         currentEXP = minEXP;
-        ResetEXPBar();
         isReadyToLevelUp = false;
     }
 
