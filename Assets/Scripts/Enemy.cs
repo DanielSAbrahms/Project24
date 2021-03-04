@@ -19,9 +19,6 @@ public class Enemy : Character
         int[] typeNumRange = { 0, numberOfEnemyTypes };
         int enemyTypeNum = Utilities.GetRandomFromRange(typeNumRange);
         enemyType = (EnemyType)Enum.Parse(typeof(EnemyType), Enum.GetNames(typeof(EnemyType))[enemyTypeNum]);
-
-        
-
     }
 
     [System.Serializable]
@@ -37,28 +34,16 @@ public class Enemy : Character
         }
     }
 
-    [Header("Parameters")]
-    [Tooltip("The Y height at which the enemy will be automatically killed (if it falls off of the level)")]
-    public float selfDestructYHeight = -20f;
-    [Tooltip("The distance at which the enemy considers that it has reached its current path destination point")]
-    public float pathReachingRadius = 2f;
-    [Tooltip("The speed at which the enemy rotates")]
-    public float orientationSpeed = 10f;
-    [Tooltip("Delay after death where the GameObject is destroyed (to allow for animation)")]
-    public float deathDuration = 0f;
 
-
-    [Header("Weapons Parameters")]
-    [Tooltip("Allow weapon swapping for this enemy")]
-    public bool swapToNextWeapon = false;
-    [Tooltip("Time delay between a weapon swap and the next attack")]
-    public float delayAfterWeaponSwap = 0f;
+    //[Header("Weapons Parameters")]
+    //[Tooltip("Allow weapon swapping for this enemy")]
+    //public bool swapToNextWeapon = false;
+    //[Tooltip("Time delay between a weapon swap and the next attack")]
+    //public float delayAfterWeaponSwap = 0f;
 
     [Tooltip("The gradient representing the color of the flash on hit")]
     [GradientUsageAttribute(true)]
     public Gradient onHitBodyGradient;
-    [Tooltip("The duration of the flash on hit")]
-    public float flashOnHitDuration = 0.5f;
 
     [Header("VFX")]
     [Tooltip("The VFX prefab spawned when the enemy dies")]
@@ -198,7 +183,7 @@ public class Enemy : Character
     void EnsureIsWithinLevelBounds()
     {
         // at every frame, this tests for conditions to kill the enemy
-        if (transform.position.y < selfDestructYHeight)
+        if (transform.position.y < Parameters.selfDestructYHeight)
         {
             Destroy(gameObject);
             return;
@@ -235,7 +220,7 @@ public class Enemy : Character
         if (lookDirection.sqrMagnitude != 0f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * orientationSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * Parameters.orientationSpeed);
         }
     }
 
@@ -296,7 +281,7 @@ public class Enemy : Character
         if (IsPathValid())
         {
             // Check if reached the path destination
-            if ((transform.position - GetDestinationOnPath()).magnitude <= pathReachingRadius)
+            if ((transform.position - GetDestinationOnPath()).magnitude <= Parameters.pathReachingRadius)
             {
                 // increment path destination index
                 m_PathDestinationNodeIndex = inverseOrder ? (m_PathDestinationNodeIndex - 1) : (m_PathDestinationNodeIndex + 1);
@@ -337,8 +322,8 @@ public class Enemy : Character
     void OnDie()
     {
         // spawn a particle system when dying
-        var vfx = Instantiate(deathVFX, deathVFXSpawnPoint.position, Quaternion.identity);
-        Destroy(vfx, 5f);
+        //var vfx = Instantiate(deathVFX, deathVFXSpawnPoint.position, Quaternion.identity);
+        //Destroy(vfx, 5f);
 
         // tells the game flow manager to handle the enemy destuction
         m_EnemyManager.UnregisterEnemy(this);
@@ -350,14 +335,14 @@ public class Enemy : Character
         //}
 
         // this will call the OnDestroy function
-        Destroy(gameObject, deathDuration);
+        Destroy(gameObject, Parameters.deathDuration);
     }
 
     private void OnDrawGizmosSelected()
     {
         // Path reaching range
         //Gizmos.color = pathReachingRangeColor;
-        Gizmos.DrawWireSphere(transform.position, pathReachingRadius);
+        Gizmos.DrawWireSphere(transform.position, Parameters.pathReachingRadius);
 
         if (m_DetectionModule != null)
         {
