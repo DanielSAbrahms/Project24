@@ -43,7 +43,10 @@ public class Player : Character
             else { statMenuManager.CloseMenu(); }
         }
 
-        if (Input.GetKeyDown(KeyCode.L)) GiveEXP(100000);
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            GiveEXP(500);
+        }
 
         if (Input.GetKeyDown(Parameters.SPRINT_KEY_BINDING)) StartSprinting();
         if (Input.GetKeyUp(Parameters.SPRINT_KEY_BINDING) || !characterStamina.hasStamina) StopSprinting();
@@ -85,6 +88,7 @@ public class Player : Character
             LevelUp();
             if (excessEXP > 0) GiveEXP(excessEXP);
         }
+        playerHUD.Refresh(this);
     }
 
     private void StartSprinting()
