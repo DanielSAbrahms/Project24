@@ -265,6 +265,12 @@ MonoBehaviour:
   stats: {fileID: 28397995}
   affiliation: 0
   aimPoint: {fileID: 1671134124}
+  selfDestructYHeight: -20
+  pathReachingRadius: 2
+  orientationSpeed: 10
+  deathDuration: 0
+  swapToNextWeapon: 0
+  delayAfterWeaponSwap: 0
   onHitBodyGradient:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 1}
@@ -294,6 +300,7 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 2
     m_NumAlphaKeys: 2
+  flashOnHitDuration: 0.5
   deathVFX: {fileID: 0}
   deathVFXSpawnPoint: {fileID: 0}
 --- !u!114 &28398002
@@ -308,6 +315,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f723d8914f50d764f8bbeea53d7ab019, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponName: 
+  weaponIcon: {fileID: 0}
+  weaponRoot: {fileID: 0}
+  weaponMuzzle: {fileID: 0}
+  shootType: 0
+  projectilePrefab: {fileID: 0}
+  delayBetweenShots: 0.5
+  bulletSpreadAngle: 0
+  bulletsPerShot: 1
+  recoilForce: 1
+  aimZoomRatio: 1
+  aimOffset: {x: 0, y: 0, z: 0}
+  ammoReloadRate: 1
+  ammoReloadDelay: 2
+  maxAmmo: 8
+  weaponAnimator: {fileID: 0}
+  muzzleFlashPrefab: {fileID: 0}
+  unparentMuzzleFlash: 0
+  shootSFX: {fileID: 0}
+  changeWeaponSFX: {fileID: 0}
+  useContinuousShootSound: 0
+  continuousShootStartSFX: {fileID: 0}
+  continuousShootLoopSFX: {fileID: 0}
+  continuousShootEndSFX: {fileID: 0}
+  m_continuousShootAudioSource: {fileID: 0}
+  m_wantsToShoot: 0
+  m_CurrentAmmo: 0
+  m_LastTimeShot: -Infinity
+  <LastChargeTriggerTimestamp>k__BackingField: 0
+  m_LastMuzzlePosition: {x: 0, y: 0, z: 0}
+  <owner>k__BackingField: {fileID: 0}
+  <sourcePrefab>k__BackingField: {fileID: 0}
+  <currentAmmoRatio>k__BackingField: 0
+  <isWeaponActive>k__BackingField: 0
+  <muzzleWorldVelocity>k__BackingField: {x: 0, y: 0, z: 0}
+  m_ShootAudioSource: {fileID: 0}
 --- !u!82 &28398003
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2784,9 +2827,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.6043758
-  m_Height: 2.146541
+  m_Height: 2.4390454
   m_Direction: 1
-  m_Center: {x: 0.009318292, y: 0.8127496, z: 0.27768117}
+  m_Center: {x: 0.009318292, y: 0.9590018, z: 0.27768117}
 --- !u!54 &1370636183
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4808,11 +4851,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6300780743366238642, guid: a879d3e73f745d14994b23338d733a63,
-        type: 3}
-      propertyPath: m_Value
-      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 6300780743366238652, guid: a879d3e73f745d14994b23338d733a63,
         type: 3}

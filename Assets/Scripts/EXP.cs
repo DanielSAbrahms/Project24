@@ -8,6 +8,7 @@ public class EXP : MonoBehaviour
     public int currentEXP;
     public bool isReadyToLevelUp;
 
+    // Start is called before the first frame update
     void Start()
     {
         currentEXP = minEXP;

@@ -18,10 +18,10 @@ public class Parameters : MonoBehaviour
     public const int DEFAULT_STRENGTH = 10;
     public const int DEFAULT_AGILITY = 10;
     public const int DEFAULT_VITALITY = 10;
-    [Tooltip("Extra health than vitality * MAX_HEALTH_SCALE")]
-    public const int PLAYER_DEFAULT_HEALTH = 80;
-    [Tooltip("Extra stamina than vitality * MAX_STAMINA_SCALE")]
-    public const int PLAYER_DEFAULT_STAMINA = 80;
+    [Tooltip("")]
+    public const int PLAYER_DEFAULT_HEALTH = 80; // Extra health than vitality * MAX_HEALTH_SCALE
+    [Tooltip("")]
+    public const int PLAYER_DEFAULT_STAMINA = 80; // Extra stamina than vitality * MAX_STAMINA_SCALE
 
     [Header("Player Movement Settings")]
     [Tooltip("How fast is walking (ambiguous)")]
