@@ -47,6 +47,8 @@ public class Player : Character
 
         if (Input.GetKeyDown(Parameters.SPRINT_KEY_BINDING)) StartSprinting();
         if (Input.GetKeyUp(Parameters.SPRINT_KEY_BINDING) || !characterStamina.hasStamina) StopSprinting();
+
+        playerHUD.Refresh(this);
     }
 
     public void UpdatePlayerStats()

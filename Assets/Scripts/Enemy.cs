@@ -61,8 +61,9 @@ public class Enemy : Character
     public UnityAction onDamaged;
 
 
-    List<RendererIndexData> m_BodyRenderers = new List<RendererIndexData>();
-    float m_LastTimeDamaged = float.NegativeInfinity;
+    //List<RendererIndexData> m_BodyRenderers = new List<RendererIndexData>();
+    //float m_LastTimeDamaged = float.NegativeInfinity;
+    //bool m_WasDamagedThisFrame;
 
     public PatrolPath patrolPath { get; set; }
     public GameObject knownDetectedTarget => m_DetectionModule.knownDetectedTarget;
@@ -72,18 +73,10 @@ public class Enemy : Character
     public NavMeshAgent m_NavMeshAgent { get; private set; }
     public DetectionModule m_DetectionModule { get; private set; }
 
+
     int m_PathDestinationNodeIndex;
     EnemyManager m_EnemyManager;
-    CharacterManager m_ActorsManager;
-    Health m_Health;
-    //Character character; 
     Collider[] m_SelfColliders;
-    Game game;
-    bool m_WasDamagedThisFrame;
-    float m_LastTimeWeaponSwapped = Mathf.NegativeInfinity;
-    int m_CurrentWeaponIndex;
-    //WeaponController m_CurrentWeapon;
-    //WeaponController[] m_Weapons;
     NavigationModule m_NavigationModule;
 
     void Start()
@@ -91,13 +84,7 @@ public class Enemy : Character
         m_EnemyManager = FindObjectOfType<EnemyManager>();
         //DebugUtility.HandleErrorIfNullFindObject<EnemyManager, EnemyController>(m_EnemyManager, this);
 
-        m_ActorsManager = FindObjectOfType<CharacterManager>();
-        //DebugUtility.HandleErrorIfNullFindObject<ActorsManager, EnemyController>(m_ActorsManager, this);
-
         m_EnemyManager.RegisterEnemy(this);
-
-        m_Health = GetComponent<Health>();
-        //DebugUtility.HandleErrorIfNullGetComponent<Health, EnemyController>(m_Health, this, gameObject);
 
         //character = GetComponent<Character>();
         //DebugUtility.HandleErrorIfNullGetComponent<Actor, EnemyController>(m_Actor, this, gameObject);
@@ -105,8 +92,6 @@ public class Enemy : Character
         m_NavMeshAgent = GetComponent<NavMeshAgent>();
         m_SelfColliders = GetComponentsInChildren<Collider>();
 
-        game = FindObjectOfType<Game>();
-        //DebugUtility.HandleErrorIfNullFindObject<GameFlowManager, EnemyController>(m_GameFlowManager, this);
 
         // Subscribe to damage & death actions
         //m_Health.onDie += OnDie;
@@ -177,7 +162,7 @@ public class Enemy : Character
         //    data.renderer.SetPropertyBlock(m_BodyFlashMaterialPropertyBlock, data.materialIndex);
         //}
 
-        m_WasDamagedThisFrame = false;
+        //m_WasDamagedThisFrame = false;
     }
 
     void EnsureIsWithinLevelBounds()
@@ -309,13 +294,13 @@ public class Enemy : Character
             {
                 onDamaged.Invoke();
             }
-            m_LastTimeDamaged = Time.time;
+            //m_LastTimeDamaged = Time.time;
 
             //// play the damage tick sound
             //if (damageTick && !m_WasDamagedThisFrame)
             //    //AudioUtility.CreateSFX(damageTick, transform.position, AudioUtility.AudioGroups.DamageTick, 0f);
 
-            m_WasDamagedThisFrame = true;
+            //m_WasDamagedThisFrame = true;
         }
     }
 

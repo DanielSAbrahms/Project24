@@ -11,7 +11,7 @@ public class Parameters : MonoBehaviour
     public const float MAX_VELOCITY_CHANGE = 10.0f;
 
     [Header("Camera Settings")]
-    public const float CAMERA_HEIGHT = 11.5f;
+    public const float CAMERA_HEIGHT = 14f;
     public const float CAMERA_DISTANCE = 6f;
 
     [Header("Default Main Stats")]

@@ -6,12 +6,14 @@ public class Health : MonoBehaviour
     public int minHealth = 0;
     public int currentHealth;
     public bool hasHealth;
+    public bool isFull;
 
     // Start is called before the first frame update
     void Start()
     {
         currentHealth = maxHealth;
         hasHealth = true;
+        isFull = true;
     }
 
     public void GiveHealth (int newHealth)
@@ -27,7 +29,11 @@ public class Health : MonoBehaviour
     private void UpdateHealth(int newHealth)
     {
         currentHealth = newHealth;
-        if (currentHealth > maxHealth) currentHealth = maxHealth;
+        if (currentHealth > maxHealth)
+        {
+            currentHealth = maxHealth;
+        }
+        isFull = currentHealth >= maxHealth;
 
         if (currentHealth <= 0)
         {
