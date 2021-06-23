@@ -7,9 +7,7 @@ public class DetectionModule : MonoBehaviour
     [Tooltip("The point representing the source of target-detection raycasts for the enemy AI")]
     public Transform detectionSourcePoint;
     [Tooltip("The max distance at which the enemy can see targets")]
-    public float detectionRange = 20f;
-    [Tooltip("The max distance at which the enemy can attack its target")]
-    public float attackRange = 10f;
+    public float detectionRange = 5f;
     [Tooltip("Time before an enemy abandons a known target that it can't see anymore")]
     public float knownTargetTimeout = 4f;
     [Tooltip("Optional animator for OnShoot animations")]
@@ -19,6 +17,7 @@ public class DetectionModule : MonoBehaviour
     public UnityAction onLostTarget;
 
     public GameObject knownDetectedTarget { get; private set; }
+    public Character detectedEnemy { get; private set; }
     public bool isTargetInAttackRange { get; private set; }
     public bool isSeeingTarget { get; private set; }
     public bool hadKnownTarget { get; private set; }
@@ -50,7 +49,7 @@ public class DetectionModule : MonoBehaviour
         float closestSqrDistance = Mathf.Infinity;
         foreach (Character otherCharacter in characterManager.characters)
         {
-            if (otherCharacter.affiliation != character.affiliation)
+           if (otherCharacter.affiliation != character.affiliation)
             {
                 float sqrDistance = (otherCharacter.transform.position - detectionSourcePoint.position).sqrMagnitude;
                 if (sqrDistance < sqrDetectionRange && sqrDistance < closestSqrDistance)
@@ -78,14 +77,18 @@ public class DetectionModule : MonoBehaviour
                             closestSqrDistance = sqrDistance;
 
                             m_TimeLastSeenTarget = Time.time;
-                            knownDetectedTarget = otherCharacter.aimPoint.gameObject;
+                            knownDetectedTarget = otherCharacter.gameObject;
+                            detectedEnemy = otherCharacter;
                         }
                     }
                 }
             }
         }
-
-        isTargetInAttackRange = knownDetectedTarget != null && Vector3.Distance(transform.position, knownDetectedTarget.transform.position) <= attackRange;
+        if (knownDetectedTarget)
+        {
+            float distanceFromOpponent = Vector3.Distance(transform.position, knownDetectedTarget.transform.position);
+            isTargetInAttackRange = distanceFromOpponent <= Parameters.MELEE_ATTACK_DISTANCE;
+        }
 
         // Detection events
         if (!hadKnownTarget &&

@@ -83,4 +83,7 @@ public class Parameters : MonoBehaviour
     public const float orientationSpeed = 10f;
     [Tooltip("Delay after death where the GameObject is destroyed (to allow for animation)")]
     public const float deathDuration = 0f;
+
+    [Tooltip("Distance all melee attacks have")]
+    public const float MELEE_ATTACK_DISTANCE = 2.5f;
 }

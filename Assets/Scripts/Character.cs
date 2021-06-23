@@ -12,8 +12,6 @@ public class Character : MonoBehaviour
     [Tooltip("Represents point where other actors will aim when they attack this actor")]
     public Transform aimPoint;
 
-    CharacterManager characterManager;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -22,22 +20,6 @@ public class Character : MonoBehaviour
         characterHealth.minHealth = 0;
         characterStamina.maxStamina = 100;
         characterStamina.minStamina = 0;
-
-        characterManager = GameObject.FindObjectOfType<CharacterManager>();
-
-        if (!characterManager.characters.Contains(this))
-        {
-            characterManager.characters.Add(this);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        // Unregister as an actor
-        if (characterManager)
-        {
-            characterManager.characters.Remove(this);
-        }
     }
 
     // Updates characters health and stamina according to current stats

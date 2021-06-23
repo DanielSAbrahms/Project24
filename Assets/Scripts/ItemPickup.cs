@@ -21,6 +21,8 @@ public class ItemPickup : MonoBehaviour
 
     Collider m_Collider;
     Vector3 m_StartPosition;
+
+    Item item;
     //bool m_HasPlayedFeedback;
 
     private void Start()
@@ -53,9 +55,9 @@ public class ItemPickup : MonoBehaviour
         Health playerHealth = player.characterHealth;
         if (playerHealth && !playerHealth.isFull)
         {
-            playerHealth.GiveHealth(healAmount);
+            playerHealth.GiveHealth((int)item.getExtraProp("heal-amount"));
 
-            m_Pickup.PlayPickupFeedback();
+            //m_Pickup.PlayPickupFeedback();
 
             Destroy(gameObject);
         }

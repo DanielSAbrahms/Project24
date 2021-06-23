@@ -11,9 +11,7 @@ public class Health : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentHealth = maxHealth;
-        hasHealth = true;
-        isFull = true;
+        InitHealth();
     }
 
     public void GiveHealth (int newHealth)
@@ -24,6 +22,14 @@ public class Health : MonoBehaviour
     public void TakeDamage(int incomingDamage)
     {
         UpdateHealth(currentHealth - incomingDamage);
+    }
+
+    public void InitHealth()
+    {
+        minHealth = 0;
+        currentHealth = maxHealth;
+        hasHealth = true;
+        isFull = true;
     }
 
     private void UpdateHealth(int newHealth)

@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class HUD : MonoBehaviour
 {
     public HealthBar healthBar;
     public StaminaBar staminaBar;
     public EXPBar expBar;
+    public Text currentEnemyLabel;
+    public HealthBar currentEnemyHealthBar;
 
     private bool isSprinting;
+    private bool hasEnemy;
 
     // Stamina Sprint Usage/ Regen
     private float staminaSprintCache = 0f;
@@ -14,9 +18,20 @@ public class HUD : MonoBehaviour
 
     void Start()
     {
-        healthBar = GameObject.FindObjectOfType<HealthBar>();
+        HealthBar[] healthBars = GameObject.FindObjectsOfType<HealthBar>();
+        foreach (HealthBar hb in healthBars)
+        {
+            if (hb.gameObject.name.Equals("HealthBar"))
+            {
+                healthBar = hb;
+            } else if (hb.gameObject.name.Equals("EnemyHealthBar"))
+            {
+                currentEnemyHealthBar = hb;
+            }
+        }
         staminaBar = GameObject.FindObjectOfType<StaminaBar>();
         expBar = GameObject.FindObjectOfType<EXPBar>();
+        currentEnemyLabel = GameObject.Find("EnemyLabel").GetComponent<Text>();
     }
 
     // Update is called once per frame
@@ -41,6 +56,12 @@ public class HUD : MonoBehaviour
         RefreshEXPBar(player.playerEXP);
     }
 
+    public void Reset(Player player)
+    {
+        ResetStaminaBar(player.characterStamina);
+        ResetHealthBar(player.characterHealth);
+        ResetEXPBar(player.playerEXP);
+    }
 
     public void ResetHealthBar(Health health)
     {
@@ -110,6 +131,28 @@ public class HUD : MonoBehaviour
     public void RefreshEXPBar(EXP exp)
     {
         expBar.Refresh(exp);
+    }
+
+    public void SetCurrentEnemy(Enemy enemy)
+    {
+        hasEnemy = true;
+        RefreshEnemyHealthBar(enemy.characterHealth);
+        currentEnemyLabel.text = enemy.name;
+        currentEnemyHealthBar.gameObject.SetActive(true);
+        currentEnemyLabel.gameObject.SetActive(true);
+    }
+
+    public void RemoveCurrentEnemy()
+    {
+        hasEnemy = false;
+        currentEnemyHealthBar.gameObject.SetActive(false);
+        currentEnemyLabel.gameObject.SetActive(false);
+        
+    }
+
+    public void RefreshEnemyHealthBar(Health health)
+    {
+        currentEnemyHealthBar.Refresh(health);
     }
 
 }

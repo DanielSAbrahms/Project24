@@ -45,9 +45,12 @@ public class Stats : MonoBehaviour
 
     public void UpdateStats()
     {
-        damageRange = (new int[2] { (int)(strength * Parameters.DAMAGE_RANGE_SCALE[0]), (int)(strength * Parameters.DAMAGE_RANGE_SCALE[1]) });
-        attackRange = (new int[2] { (int)(agility * Parameters.ATTACK_RANGE_SCALE[0]), (int)(agility * Parameters.ATTACK_RANGE_SCALE[1]) });
-        defenseRange = (new int[2] { (int)(agility * Parameters.DEFENSE_RANGE_SCALE[0]), (int)(agility * Parameters.DEFENSE_RANGE_SCALE[1]) });
+        damageRange = (new int[2] { Mathf.RoundToInt(strength * Parameters.DAMAGE_RANGE_SCALE[0]), Mathf.RoundToInt(strength * Parameters.DAMAGE_RANGE_SCALE[1]) });
+        attackRange = (new int[2] { Mathf.RoundToInt(agility * Parameters.ATTACK_RANGE_SCALE[0]), Mathf.RoundToInt(agility * Parameters.ATTACK_RANGE_SCALE[1]) });
+        defenseRange = (new int[2] { Mathf.RoundToInt(agility * Parameters.DEFENSE_RANGE_SCALE[0]), Mathf.RoundToInt(agility * Parameters.DEFENSE_RANGE_SCALE[1]) });
+        if (damageRange[0] == 0) damageRange[0] = 1;
+        if (attackRange[0] == 0) attackRange[0] = 1;
+        if (defenseRange[0] == 0) defenseRange[0] = 1;
     }
 
     public void SetStrength(int newStrength)

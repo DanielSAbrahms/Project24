@@ -12,8 +12,7 @@ public class Stamina : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        currentStamina = maxStamina;
-        hasStamina = true;
+        InitStamina();
     }
 
     public void GiveStamina(int newStamina)
@@ -41,5 +40,12 @@ public class Stamina : MonoBehaviour
         {
             hasStamina = true;
         }
+    }
+
+    public void InitStamina()
+    {
+        currentStamina = maxStamina;
+        minStamina = 0;
+        hasStamina = true;
     }
 }

@@ -1,0 +1,29 @@
+[
+ {
+   "Id": 1,
+   "Name": "Health Pickup",
+   "Type": "Consumable",
+   "Value": 10,
+   "InventorySizeX": 1,
+   "InventorySizeY": 1,
+   "ExtraProperties": "E_HealthIncrease = 10;"
+ },
+ {
+   "Id": 2,
+   "Name": "Stamina Pickup",
+   "Type": "Consumable",
+   "Value": 10,
+   "InventorySizeX": 1,
+   "InventorySizeY": 2,
+   "ExtraProperties": "E_StaminaIncrease = 10;"
+ },
+ {
+   "Id": 3,
+   "Name": "EXP Bag",
+   "Type": "Consumable",
+   "Value": 10,
+   "InventorySizeX": 2,
+   "InventorySizeY": 2,
+   "ExtraProperties": "E_EXPIncrease = 100;"
+ }
+]

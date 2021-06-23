@@ -5,6 +5,7 @@ public class Player : Character
     public EXP playerEXP;
     public PlayerMovementController movementController;
     public StatMenuManager statMenuManager;
+    CharacterManager characterManager;
 
     public HUD playerHUD;
 
@@ -14,13 +15,20 @@ public class Player : Character
         playerHUD = GameObject.FindObjectOfType<HUD>();
 
         level = 1;
+        affiliation = 0; // Player Team
         stats.SetupStats(Parameters.DEFAULT_STRENGTH, Parameters.DEFAULT_AGILITY, Parameters.DEFAULT_VITALITY);
         playerEXP.InitMaxEXP(Parameters.REQUIRED_EXP_PER_LEVEL);
-        characterHealth.minHealth = 0;
-        characterStamina.minStamina = 0;
 
-        UpdatePlayerStats();
-        playerHUD.ResetHealthBar(characterHealth);
+        InitPlayerStats();
+        playerHUD.Reset(this);
+        playerHUD.RemoveCurrentEnemy();
+
+        characterManager = GameObject.FindObjectOfType<CharacterManager>();
+
+        if (!characterManager.characters.Contains(this))
+        {
+            characterManager.characters.Add(this);
+        }
     }
 
     // Update is called once per frame
@@ -59,6 +67,14 @@ public class Player : Character
         playerHUD.UpdateAllStats(this);
     }
 
+    public void InitPlayerStats()
+    {
+        // We need to update before calling inits for stats for the max to be set correctly
+        UpdatePlayerStats();
+        characterHealth.InitHealth();
+        characterStamina.InitStamina();
+    }
+
     public void LevelUp()
     {
         level++;
@@ -86,6 +102,25 @@ public class Player : Character
         {
             LevelUp();
             if (excessEXP > 0) GiveEXP(excessEXP);
+        }
+    }
+
+    public void OnAttacked(Enemy enemy)
+    {
+        playerHUD.SetCurrentEnemy(enemy);
+    }
+
+    public void OnForgetEnemy()
+    {
+        playerHUD.RemoveCurrentEnemy();
+    }
+
+    void OnDie()
+    {
+        // Unregister as an actor
+        if (characterManager)
+        {
+            characterManager.characters.Remove(this);
         }
     }
 

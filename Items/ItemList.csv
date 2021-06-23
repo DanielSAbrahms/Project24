@@ -1,0 +1,4 @@
+Id,Name,Type,Value,InventorySizeX,InventorySizeY,ExtraProperties
+1,Health Pickup,Consumable,10,1,1,E_HealthIncrease = 10;
+2,Stamina Pickup,Consumable,10,1,2,E_StaminaIncrease = 10;
+3,EXP Bag,Consumable,10,2,2,E_EXPIncrease = 100;
