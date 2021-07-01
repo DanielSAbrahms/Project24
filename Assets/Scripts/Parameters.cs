@@ -86,4 +86,6 @@ public class Parameters : MonoBehaviour
 
     [Tooltip("Distance all melee attacks have")]
     public const float MELEE_ATTACK_DISTANCE = 2.5f;
+    [Tooltip("Min distance cursor needs to consider it focused")]
+    public const float CURSOR_MIN_DISTANCE_TO_OBJECT = 4f;
 }

@@ -63,7 +63,7 @@ public class Enemy : Character
     Collider[] m_SelfColliders;
     NavigationModule m_NavigationModule;
 
-    const int attackTimeout = 60; // in frames
+    const int attackTimeout = 360; // in frames
     int framesUntilNextAttack = 0;
 
     void Start()
@@ -82,10 +82,7 @@ public class Enemy : Character
 
         characterManager = GameObject.FindObjectOfType<CharacterManager>();
 
-        if (!characterManager.characters.Contains(this))
-        {
-            characterManager.characters.Add(this);
-        }
+        characterManager.RegisterEnemy(this);
 
         var detectionModules = GetComponentsInChildren<DetectionModule>();
  
@@ -237,10 +234,10 @@ public class Enemy : Character
         Destroy(gameObject, Parameters.deathDuration);
 
         // Unregister as an actor
-        if (characterManager)
-        {
-            characterManager.characters.Remove(this);
-        }
+        //if (characterManager)
+        //{
+        //    characterManager.characters.Remove(this);
+        //}
     }
 
     public void TryAttack()

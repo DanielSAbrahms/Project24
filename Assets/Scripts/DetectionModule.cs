@@ -47,40 +47,36 @@ public class DetectionModule : MonoBehaviour
         float sqrDetectionRange = detectionRange * detectionRange;
         isSeeingTarget = false;
         float closestSqrDistance = Mathf.Infinity;
-        foreach (Character otherCharacter in characterManager.characters)
+        Player player = characterManager.player;
+        float sqrDistance = (player.transform.position - detectionSourcePoint.position).sqrMagnitude;
+
+        if (sqrDistance < sqrDetectionRange && sqrDistance < closestSqrDistance)
         {
-           if (otherCharacter.affiliation != character.affiliation)
+            // Check for obstructions
+            RaycastHit[] hits = Physics.RaycastAll(detectionSourcePoint.position, (player.aimPoint.position - detectionSourcePoint.position).normalized, detectionRange, -1, QueryTriggerInteraction.Ignore);
+            RaycastHit closestValidHit = new RaycastHit();
+            closestValidHit.distance = Mathf.Infinity;
+            bool foundValidHit = false;
+            foreach (var hit in hits)
             {
-                float sqrDistance = (otherCharacter.transform.position - detectionSourcePoint.position).sqrMagnitude;
-                if (sqrDistance < sqrDetectionRange && sqrDistance < closestSqrDistance)
+                if (!selfColliders.Contains(hit.collider) && hit.distance < closestValidHit.distance)
                 {
-                    // Check for obstructions
-                    RaycastHit[] hits = Physics.RaycastAll(detectionSourcePoint.position, (otherCharacter.aimPoint.position - detectionSourcePoint.position).normalized, detectionRange, -1, QueryTriggerInteraction.Ignore);
-                    RaycastHit closestValidHit = new RaycastHit();
-                    closestValidHit.distance = Mathf.Infinity;
-                    bool foundValidHit = false;
-                    foreach (var hit in hits)
-                    {
-                        if (!selfColliders.Contains(hit.collider) && hit.distance < closestValidHit.distance)
-                        {
-                            closestValidHit = hit;
-                            foundValidHit = true;
-                        }
-                    }
+                    closestValidHit = hit;
+                    foundValidHit = true;
+                }
+            }
 
-                    if (foundValidHit)
-                    {
-                        Character hitActor = closestValidHit.collider.GetComponentInParent<Character>();
-                        if (hitActor == otherCharacter)
-                        {
-                            isSeeingTarget = true;
-                            closestSqrDistance = sqrDistance;
+            if (foundValidHit)
+            {
+                Character hitActor = closestValidHit.collider.GetComponentInParent<Character>();
+                if (hitActor == player)
+                {
+                    isSeeingTarget = true;
+                    closestSqrDistance = sqrDistance;
 
-                            m_TimeLastSeenTarget = Time.time;
-                            knownDetectedTarget = otherCharacter.gameObject;
-                            detectedEnemy = otherCharacter;
-                        }
-                    }
+                    m_TimeLastSeenTarget = Time.time;
+                    knownDetectedTarget = player.gameObject;
+                    detectedEnemy = player;
                 }
             }
         }

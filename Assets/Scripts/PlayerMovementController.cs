@@ -8,6 +8,7 @@ public class PlayerMovementController : MonoBehaviour
     //Player Camera variables
     public Camera playerCamera;
     public GameObject targetIndicatorPrefab;
+    public CharacterManager cm;
 
     //Player Controller variables
     public bool isSprinting;
@@ -27,6 +28,7 @@ public class PlayerMovementController : MonoBehaviour
 
     void Awake()
     {
+        cm = FindObjectOfType<CharacterManager>();
         r = GetComponent<Rigidbody>();
         r.freezeRotation = true;
         r.useGravity = true;
@@ -101,6 +103,24 @@ public class PlayerMovementController : MonoBehaviour
 
         //No raycast hit, hide the aim target by moving it far away
         return new Vector3(-5000, -5000, -5000);
+    }
+
+    public Enemy GetClosestEnemyToCursor()
+    {
+        Enemy temp = null;
+        float minDist = Mathf.Infinity;
+        Vector3 currentPos = GetAimTargetPos();
+        foreach (Enemy c in cm.enemies)
+        {
+            float dist = Vector3.Distance(c.gameObject.transform.position, currentPos);
+            if (dist < minDist)
+            {
+                temp = c;
+                minDist = dist;
+            }
+        }
+        if (minDist < Parameters.CURSOR_MIN_DISTANCE_TO_OBJECT) return temp;
+        else return null;
     }
 
     public void StartSprinting() { isSprinting = true; }

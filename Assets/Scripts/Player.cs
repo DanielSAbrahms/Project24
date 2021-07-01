@@ -9,6 +9,10 @@ public class Player : Character
 
     public HUD playerHUD;
 
+    public Enemy currentOpponent;
+    const int attackTimeout = 360; // in frames
+    int framesUntilNextAttack = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,25 +29,22 @@ public class Player : Character
 
         characterManager = GameObject.FindObjectOfType<CharacterManager>();
 
-        if (!characterManager.characters.Contains(this))
-        {
-            characterManager.characters.Add(this);
-        }
+        characterManager.RegisterPlayer(this);
     }
 
     // Update is called once per frame
     void Update()
     {
         playerHUD.RefreshHealthBar(characterHealth);
+        if (currentOpponent) playerHUD.SetCurrentEnemy(currentOpponent);
 
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            characterHealth.TakeDamage(25);
-        }
-        else if (Input.GetKeyDown(KeyCode.C))
-        {
-            characterHealth.GiveHealth(10);
-        }
+        playerHUD.Refresh(this);
+        if (framesUntilNextAttack > 0) framesUntilNextAttack--;
+
+        if (Input.GetMouseButton(0)) TryAttack();
+
+        if (Input.GetKeyDown(KeyCode.X)) characterHealth.TakeDamage(25);
+        else if (Input.GetKeyDown(KeyCode.C)) characterHealth.GiveHealth(10);
 
         if (Input.GetKeyDown(Parameters.OPEN_STAT_MENU_KEY_BINDING))
         {
@@ -56,7 +57,14 @@ public class Player : Character
         if (Input.GetKeyDown(Parameters.SPRINT_KEY_BINDING)) StartSprinting();
         if (Input.GetKeyUp(Parameters.SPRINT_KEY_BINDING) || !characterStamina.hasStamina) StopSprinting();
 
-        playerHUD.Refresh(this);
+        Enemy tryCurrentEnemy = movementController.GetClosestEnemyToCursor();
+        if (tryCurrentEnemy) currentOpponent = tryCurrentEnemy;
+        else
+        {
+            currentOpponent = null;
+            playerHUD.RemoveCurrentEnemy();
+        }
+
     }
 
     public void UpdatePlayerStats()
@@ -117,10 +125,32 @@ public class Player : Character
 
     void OnDie()
     {
-        // Unregister as an actor
-        if (characterManager)
+        //// Unregister as an actor
+        //if (characterManager)
+        //{
+        //    characterManager.characters.Remove(this);
+        //}
+    }
+
+    public void TryAttack()
+    {
+        if (framesUntilNextAttack > 0 || !currentOpponent) return;
+
+        // Ensure target is within range
+        Vector3 enemyPosition = currentOpponent.transform.position;
+        Vector3 playerPosition = transform.position;
+        float distanceFromEnemy = Vector3.Distance(enemyPosition, playerPosition);
+        if (distanceFromEnemy > Parameters.MELEE_ATTACK_DISTANCE) return;
+
+        int playerAttack = stats.GetRandomAttack();
+        int enemyDefense = currentOpponent.stats.GetRandomDefense();
+
+        // if attack lands
+        if (playerAttack > enemyDefense)
         {
-            characterManager.characters.Remove(this);
+            int enemyDamage = stats.GetRandomAttack();
+            currentOpponent.characterHealth.TakeDamage(enemyDamage);
+            framesUntilNextAttack = attackTimeout;
         }
     }
 
